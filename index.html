@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <title>For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Link preview kép -->
+  <meta property="og:title" content="For You">
+  <meta property="og:description" content="press play">
+  <meta property="og:image" content="Borito.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
 
@@ -75,7 +85,7 @@
     }
     .spotify-wrapper.visible{opacity:1;transform:translateY(0);}
 
-    /* 🫧 BUBORÉK TRIGGER */
+    /* 🫧 buborék */
     #secretTrigger{
       position:absolute;right:12px;bottom:10px;
       font-size:20px;cursor:pointer;
@@ -91,7 +101,6 @@
       to{transform:scale(1.25);filter:drop-shadow(0 0 10px rgba(255,255,255,.95));}
     }
 
-    /* Tooltip */
     #secretTooltip{
       position:absolute;right:34px;bottom:32px;
       font-size:11px;background:rgba(0,0,0,.7);
@@ -102,7 +111,6 @@
     }
     #secretTooltip.visible{opacity:1;transform:translateY(0);}
 
-    /* Rejtett üzenetek */
     #secretMessage,#secretMessage2,#secretMessage3{
       font-size:11px;line-height:1.38;
       color:rgba(0,0,0,.75);
@@ -126,18 +134,28 @@
       <iframe style="border-radius:12px"
         src="https://open.spotify.com/embed/playlist/3lVyHwWy6w6ooSlj4BVIu2"
         width="100%" height="380"
-        frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"></iframe>
     </div>
 
-    <!-- 🫧 Easter Egg ikon -->
     <div id="secretTrigger">🫧</div>
     <div id="secretTooltip">katt ide :)</div>
 
-    <p id="secretMessage">Titokban reméltem, hogy megtalálod.<br>És hogy érted, mi van a sorok között.</p>
-    <p id="secretMessage2">Ha már hallod is, akkor tudod,<br>hogy ez a zene ott kezdődik, ahol a szavak elfogynak.</p>
-    <p id="secretMessage3">Ha ezt is megtaláltad,<br>akkor valószínűleg több vagy nekem, mint hinnéd.</p>
+    <p id="secretMessage">
+Titokban reméltem, hogy megtalálod.
+És hogy érted, mi van a sorok között.
+    </p>
 
+    <p id="secretMessage2">
+Ha már hallod is, akkor tudod,
+hogy ez a zene ott kezdődik, ahol a szavak elfogynak.
+    </p>
+
+    <p id="secretMessage3">
+Ha ezt is megtaláltad,
+akkor valószínűleg több vagy nekem, mint hinnéd.
+    </p>
   </main>
 
   <script>
@@ -178,10 +196,14 @@ ahogy Kosztolányi a Nyár, nyár, nyár soraiban tette.`;
       clickCount++;
       secretTooltip.classList.remove("visible");
       secretMessage1.classList.toggle("visible");
-      if(clickCount===3){secretMessage3.classList.add("visible");}
+      if(clickCount===3){
+        secretMessage3.classList.add("visible");
+      }
     });
 
-    spotifyBox.addEventListener("click",()=>secretMessage2.classList.add("visible"));
+    spotifyBox.addEventListener("click",()=>{
+      secretMessage2.classList.add("visible");
+    });
   </script>
 </body>
 </html>

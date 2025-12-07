@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>For You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Link preview kép -->
+  <meta property="og:title" content="For You">
+  <meta property="og:description" content="press play">
+  <meta property="og:image" content="Borito.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.85) 3%, rgba(255,255,255,0.4) 15%, transparent 30%),
+        radial-gradient(circle at 50% 15%, #A2D9FF 10%, #A2D9FF 40%, #FFB3A3 100%);
+      background-attachment: fixed;
+      font-family:"Courier New",Courier,monospace;
+      overflow:hidden;
+      position:relative;
+    }
+
+    body::after{
+      content:"";position:absolute;inset:0;
+      background: radial-gradient(circle at 60% 15%, rgba(255,255,255,0.35), transparent 70%);
+      animation:floatingGlow 8s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes floatingGlow{
+      from{transform:translateY(-7px) translateX(-5px);opacity:.30;}
+      to{transform:translateY(7px) translateX(5px);opacity:.55;}
+    }
+
+    .card{
+      max-width:450px;width:100%;
+      background:rgba(255,255,255,.45);
+      backdrop-filter:blur(12px);
+      border-radius:24px;
+      padding:26px 22px 28px;
+      border:1px solid rgba(255,255,255,.7);
+      box-shadow:0 16px 40px rgba(0,0,0,.18);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::after{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(circle at 70% 25%,rgba(255,255,255,.35),transparent 70%);
+      opacity:.32;animation:glow 6s ease-in-out infinite alternate;
+    }
+    @keyframes glow{from{opacity:.18;}to{opacity:.42;}}
+
+    #message{
+      font-size:14px;line-height:1.6;color:#222;
+      text-align:center;white-space:pre-wrap;
+      min-height:96px;display:inline-block;
+    }
+
+    #cursor{
+      display:inline-block;width:6px;height:16px;
+      background:#000;margin-left:3px;
+      animation:blink .7s infinite alternate;
+    }
+    @keyframes blink{from{opacity:1;}to{opacity:0;}}
+
+    .fade-out{animation:fadeOut 1.2s ease forwards;}
+    @keyframes fadeOut{from{opacity:1;}to{opacity:0.55;}}
+
+    .spotify-wrapper{
+      border-radius:18px;overflow:hidden;margin-top:14px;
+      opacity:0;transform:translateY(10px);
+      transition:opacity 1.6s ease, transform 1.6s ease;
+    }
+    .spotify-wrapper.visible{opacity:1;transform:translateY(0);}
+
+    /* 🫧 buborék */
+    #secretTrigger{
+      position:absolute;right:12px;bottom:10px;
+      font-size:20px;cursor:pointer;
+      opacity:.85;z-index:3;
+      transition:.3s ease;
+      animation:bubblePulse 2.8s ease-in-out infinite alternate;
+      user-select:none;
+    }
+    #secretTrigger:hover{transform:scale(1.2);opacity:1;}
+
+    @keyframes bubblePulse{
+      from{transform:scale(1);filter:drop-shadow(0 0 4px rgba(255,255,255,.5));}
+      to{transform:scale(1.25);filter:drop-shadow(0 0 10px rgba(255,255,255,.95));}
+    }
+
+    #secretTooltip{
+      position:absolute;right:34px;bottom:32px;
+      font-size:11px;background:rgba(0,0,0,.7);
+      color:#fff;padding:4px 8px;border-radius:999px;
+      opacity:0;transform:translateY(6px);
+      pointer-events:none;transition:.6s;
+      white-space:nowrap;z-index:4;
+    }
+    #secretTooltip.visible{opacity:1;transform:translateY(0);}
+
+    #secretMessage,#secretMessage2,#secretMessage3{
+      font-size:11px;line-height:1.38;
+      color:rgba(0,0,0,.75);
+      text-align:right;margin-top:7px;
+      opacity:0;transform:translateY(6px);
+      transition:.7s;white-space:pre-wrap;
+    }
+    #secretMessage.visible,#secretMessage2.visible,#secretMessage3.visible{
+      opacity:1;transform:translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+
+    <div style="text-align:center;margin-bottom:4px;">
+      <span id="message"></span><span id="cursor"></span>
+    </div>
+
+    <div class="spotify-wrapper" id="spotifyBox">
+      <iframe style="border-radius:12px"
+        src="https://open.spotify.com/embed/playlist/3lVyHwWy6w6ooSlj4BVIu2"
+        width="100%" height="380"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    </div>
+
+    <div id="secretTrigger">🫧</div>
+    <div id="secretTooltip">katt ide :)</div>
+
+    <p id="secretMessage">
+Titokban reméltem, hogy megtalálod.
+És hogy érted, mi van a sorok között.
+    </p>
+
+    <p id="secretMessage2">
+Ha már hallod is, akkor tudod,
+hogy ez a zene ott kezdődik, ahol a szavak elfogynak.
+    </p>
+
+    <p id="secretMessage3">
+Ha ezt is megtaláltad,
+akkor valószínűleg több vagy nekem, mint hinnéd.
+    </p>
+  </main>
+
+  <script>
+    const text =
+`Vannak mondatok, amiket talán könnyebb így elmondani, mint hangosan.
+Ez a playlist neked szól — benne valami csendes gondolat, úgy elrejtve,
+ahogy Kosztolányi a Nyár, nyár, nyár soraiban tette.`;
+
+    let i=0, speed=40;
+    const msgEl=document.getElementById("message");
+    const cursorEl=document.getElementById("cursor");
+    const spotifyBox=document.getElementById("spotifyBox");
+    const secretTrigger=document.getElementById("secretTrigger");
+    const secretTooltip=document.getElementById("secretTooltip");
+    const secretMessage1=document.getElementById("secretMessage");
+    const secretMessage2=document.getElementById("secretMessage2");
+    const secretMessage3=document.getElementById("secretMessage3");
+    let clickCount=0;
+
+    function type(){
+      if(i<text.length){
+        msgEl.textContent+=text.charAt(i); i++;
+        setTimeout(type,speed);
+      } else{
+        cursorEl.style.display="none";
+        msgEl.classList.add("fade-out");
+        setTimeout(()=>spotifyBox.classList.add("visible"),2000);
+      }
+    }
+
+    window.onload=()=>{
+      type();
+      setTimeout(()=>secretTooltip.classList.add("visible"),1300);
+      setTimeout(()=>secretTooltip.classList.remove("visible"),4200);
+    }
+
+    secretTrigger.addEventListener("click",()=>{
+      clickCount++;
+      secretTooltip.classList.remove("visible");
+      secretMessage1.classList.toggle("visible");
+      if(clickCount===3){
+        secretMessage3.classList.add("visible");
+      }
+    });
+
+    spotifyBox.addEventListener("click",()=>{
+      secretMessage2.classList.add("visible");
+    });
+  </script>
+</body>
+</html>
